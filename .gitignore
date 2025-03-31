@@ -1,0 +1,8 @@
+**/__pycache__
+.venv*
+.idea
+**/.env
+lang_identificator
+**/.ipynb_checkpoints
+data
+logs
