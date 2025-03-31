@@ -1,0 +1,49 @@
+version: '3.10'
+
+services:
+  links_api:
+    image: links_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: links_api
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: links_api_db
+      REDIS_URL: redis://redis:6379/0  # Added Redis URL environment variable (if needed)
+    ports:
+      - "9010:9010"
+    networks:
+      - app-network
+    depends_on:
+      - links_api_db
+      - redis   # Ensure Redis is available before starting links_api
+    restart: always
+
+  links_api_db:
+    image: postgres
+    container_name: links_api_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - "${DB_PATH:-${PWD}/links_api_db}:/var/lib/postgresql/data"
+    ports:
+      - "5433:5432"
+    networks:
+      - app-network
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    networks:
+      - app-network
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
