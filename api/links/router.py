@@ -46,7 +46,10 @@ def shorten_link(
     db.commit()
 
     if db_link.expires_at:
+        if db_link.expires_at.tzinfo is None:
+            db_link.expires_at = db_link.expires_at.replace(tzinfo=timezone.utc)
         ttl = (db_link.expires_at - datetime.now(timezone.utc)).total_seconds()
+        # ttl = (db_link.expires_at - datetime.now(timezone.utc)).total_seconds()
     else:
         ttl = 24 * 3600
     if ttl > 0:
@@ -71,7 +74,6 @@ def redirect_to_original(
 
     original_url = redis.get(short_code)
     if original_url:
-        original_url = original_url.decode("utf-8")
         return RedirectResponse(original_url=original_url)
 
     db_link = db.query(md.Link).filter(md.Link.short_code == short_code).first()

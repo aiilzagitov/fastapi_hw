@@ -1,15 +1,12 @@
 from fastapi import FastAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from api.db import engine, SessionLocal
-from api.models import Base
+from api.db import SessionLocal
 from api.links.router import router as links_router
 from api.auth.router import router as auth_router
 
 from api.cache import get_redis
 from datetime import datetime, timezone
 from api.models import Link
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.include_router(auth_router)
