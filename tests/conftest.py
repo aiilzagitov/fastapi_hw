@@ -10,9 +10,14 @@ from api.db import Base, get_db
 from api import models as md
 from api.cache import get_redis
 from api.auth.users import get_current_user, get_current_user_optional
+from sqlalchemy.pool import StaticPool
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 TEST_REDIS_URL = "redis://localhost:6379/1"
@@ -40,10 +45,6 @@ def redis_client() -> Generator:
     yield redis_client
     redis_client.flushdb()
 
-# @pytest.fixture
-# def auth_test_client():
-#     with TestClient(app) as client:
-#         yield client
 
 @pytest.fixture(scope="function")
 def client(db_session, redis_client):

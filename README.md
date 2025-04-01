@@ -59,3 +59,35 @@ API поддерживает аутентификацию пользовател
 
     last_accessed_at: Время последнего доступа к ссылке (опционально).
 
+## Тесты
+``` python3.10 -m venv .venv```
+
+```source .venv/bin/activate```
+
+```pip install -r requirements.txt```
+
+```coverage run -m pytest tests/```
+
+```coverage report -m```
+
+| Module/File               | Stmts | Miss | Cover | Missing               |
+|---------------------------|-------|------|-------|-----------------------|
+| api/auth/dependencies.py  | 11    | 1    | 91%   | 12                   |
+| api/auth/router.py         | 31    | 0    | 100%  |                       |
+| api/auth/schema.py         | 9     | 0    | 100%  |                       |
+| api/auth/token.py          | 15    | 0    | 100%  |                       |
+| api/auth/users.py          | 40    | 17   | 58%   | 34-49, 56-66         |
+| api/cache.py               | 4     | 1    | 75%   | 5                    |
+| api/config.py              | 14    | 0    | 100%  |                       |
+| api/db.py                  | 13    | 4    | 69%   | 12-16                |
+| api/functions.py           | 8     | 0    | 100%  |                       |
+| api/links/router.py        | 85    | 13   | 85%   | 83-94, 106, 125, 133-134 |
+| api/main.py                | 26    | 11   | 58%   | 16-27                |
+| api/models.py              | 18    | 0    | 100%  |                       |
+| api/schema.py              | 28    | 0    | 100%  |                       |
+| api/utils.py               | 13    | 1    | 92%   | 15                   |
+| tests/conftest.py          | 52    | 0    | 100%  |                       |
+| tests/test_auth.py         | 25    | 0    | 100%  |                       |
+| tests/test_links.py        | 66    | 0    | 100%  |                       |
+| **TOTAL**                  | 458   | 48   | 90%   |                       |
+
